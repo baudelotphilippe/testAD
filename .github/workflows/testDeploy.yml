@@ -14,9 +14,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # - name: Test Connection to Alwaysdata
-    #   run: |
-    #     ping -c 3 lms-app.alwaysdata.net
+    - name: ping
+      run: |
+          echo "Testing ping to baudelot.alwaysdata.net..."
+          ping -c 4 baudelot.alwaysdata.net || exit 1
     
     - name: Setup SSH
       run: |
