@@ -1,1 +1,34 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - master  # Utilisez votre branche principale
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # - name: Test Connection to Alwaysdata
+    #   run: |
+    #     ping -c 3 lms-app.alwaysdata.net
+    
+    - name: Setup SSH
+      run: |
+        # Assurez-vous que le répertoire ~/.ssh existe
+        mkdir -p ~/.ssh
+        # Écrit la clé privée à partir des secrets (si nécessaire)
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        # Ajoute le serveur Alwaysdata à known_hosts en forçant l'IPv4
+        ssh-keyscan -4 -H baudelot.alwaysdata.net >> ~/.ssh/known_hosts
+
+    - name: Deploy code via SSH
+      run: |
+        # Se connecte à Alwaysdata et déploie le code en forçant l'IPv4
+        ssh -4 -i ~/.ssh/id_rsa baudelot@ssh-baudelot.alwaysdata.net "cd /home/baudelot && git pull"
 
