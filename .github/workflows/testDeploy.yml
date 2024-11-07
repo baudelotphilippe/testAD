@@ -14,10 +14,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: ping
+  #   - name: ping
+  #     run: |
+  #         echo "Testing ping to baudelot.alwaysdata.net..."
+  #         ping -c 4 baudelot.alwaysdata.net || exit 1
+          
+    - name: Check SSH port 22 accessibility
       run: |
-          echo "Testing ping to baudelot.alwaysdata.net..."
-          ping -c 4 baudelot.alwaysdata.net || exit 1
+          echo "Testing SSH port 22 accessibility..."
+          nc -zv baudelot.alwaysdata.net 22 || exit 1
     
     - name: Setup SSH
       run: |
